@@ -5,38 +5,51 @@ class Database:
     def __init__(self, db):
         self.conn = sqlite3.connect(db)
         self.cur = self.conn.cursor()
+        # first_name.get(), lastName_text.get(),
+            #   state_text.get(), city_text.get(), address_text.get(), email_text.get(), phone_text.get(), street_text.get()
         self.cur.execute(
-            "CREATE TABLE IF NOT EXISTS Contact (id INTEGER PRIMARY KEY, fisrtName text, lastName text,  text, price text)")
+            "CREATE TABLE IF NOT EXISTS addressbook (id INTEGER PRIMARY KEY, firstName text, lastName text, state text , city text, address text, email text, phone text, street text)")
         self.conn.commit()
 
     def fetch(self):
-        self.cur.execute("SELECT * FROM parts")
+        self.cur.execute("SELECT * FROM addressbook")
         rows = self.cur.fetchall()
         return rows
 
-    def insert(self, part, customer, retailer, price):
-        self.cur.execute("INSERT INTO parts VALUES (NULL, ?, ?, ?, ?)",
-                         (part, customer, retailer, price))
+    def insert(self, firstName, lastName, state, city, address, email, phone, street):  
+        self.cur.execute("INSERT INTO addressbook VALUES (NULL, ?, ?, ?, ? , ? , ? ,? , ?)",
+                         (firstName, lastName, state, city, address, email, phone, street))
         self.conn.commit()
 
     def remove(self, id):
-        self.cur.execute("DELETE FROM parts WHERE id=?", (id,))
+        self.cur.execute("DELETE FROM addressbook WHERE id=?", (id,))
         self.conn.commit()
 
-    def update(self, id, part, customer, retailer, price):
-        self.cur.execute("UPDATE parts SET part = ?, customer = ?, retailer = ?, price = ? WHERE id = ?",
-                         (part, customer, retailer, price, id))
+    def update(self, id, firstName, lastName, state, city, address, email, phone, street):
+        self.cur.execute("UPDATE addressbook SET firstName = ?, lastName = ?,  state= ?, city = ? , address = ? , email = ?,phone = ? , street = ? WHERE id = ?",
+                         (firstName, lastName, state, city, address, email, phone, street , id))
         self.conn.commit()
+
+    def search(self, search_text):
+        self.cur.execute("SELECT * FROM addressbook WHERE firstName = %"+search_text+"% OR lastName = %"+search_text+"% OR state =  %"+search_text+"% OR city =  %"+search_text+"% OR address =  %"+search_text+"% OR email =  %"+search_text+"% OR phone =  %"+search_text+"% OR street =  %"+search_text+"%")       
+        rows = self.cur.fetchall()
+        return rows
+        
 
     def __del__(self):
         self.conn.close()
 
 
-# db = Database('store.db')
-# db.insert("4GB DDR4 Ram", "John Doe", "Microcenter", "160")
-# db.insert("Asus Mobo", "Mike Henry", "Microcenter", "360")
-# db.insert("500w PSU", "Karen Johnson", "Newegg", "80")
-# db.insert("2GB DDR4 Ram", "Karen Johnson", "Newegg", "70")
-# db.insert("24 inch Samsung Monitor", "Sam Smith", "Best Buy", "180")
-# db.insert("NVIDIA RTX 2080", "Albert Kingston", "Newegg", "679")
-# db.insert("600w Corsair PSU", "Karen Johnson", "Newegg", "130")
+# db = Database('addressbook.db')
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
+

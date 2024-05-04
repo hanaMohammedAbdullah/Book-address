@@ -9,7 +9,7 @@
 pipenv install
 
 # Run script
-python part_manager.py
+python bookaddress.py
 
 
 # Compiled with Pyinstaller

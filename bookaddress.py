@@ -92,7 +92,21 @@ def export():
         for i in range(parts_list.size()):
             writer.writerow(parts_list.get(i))
         messagebox.showinfo('Data Exported', 'Your data has been exported to ' + os.path.basename(fln) + ' successfully')
+def search():
+    parts_list.delete(0, END)
+    for row in db.search(Search_text.get()):
+        parts_list.insert(END, row)
 
+def import_data():
+    fln = filedialog.askopenfilename(initialdir=os.getcwd(), title='Open CSV', filetypes=[("CSV file", "*.csv")])
+    with open(fln) as f:
+        reader = csv.reader(f)
+        # skip the first row
+        next(reader)
+        for row in reader:
+            db.insert(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8])
+            parts_list.insert(END, row)
+        messagebox.showinfo('Data Imported', 'Your data has been imported successfully')       
 # Create window object
 app = Tk()
 
@@ -188,7 +202,7 @@ clear_btn.grid(row=4, column=3)
 export_btn = Button(app, text='Export', width=12, command=export)
 export_btn.grid(row=4, column=4)
 
-inport_btn = Button(app, text='Import', width=12, command=clear_text)
+inport_btn = Button(app, text='Import', width=12, command=import_data)
 inport_btn.grid(row=4, column=5)
 
 app.title('Address Book')

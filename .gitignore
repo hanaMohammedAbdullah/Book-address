@@ -5,3 +5,4 @@ store.db
 part_manager.spec
 .vscode
 .DS_Store
+.csv

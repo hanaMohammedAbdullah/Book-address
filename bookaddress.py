@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 from tkinter import filedialog
 from db import Database
 # importing csv and os module
@@ -109,6 +110,34 @@ def import_data():
         messagebox.showinfo('Data Imported', 'Your data has been imported successfully')       
 # Create window object
 app = Tk()
+# adding frame 
+# wrapperData = LabelFrame(app, text="Address Book data")
+# wrapperAction = LabelFrame(app, text="Address Book Action")
+
+# wrapperDatatable = LabelFrame(app, text="Address Book List")
+
+
+
+
+# # 
+# wrapperData.pack(fill="both", expand="yes", padx=20, pady=10)
+# wrapperDatatable.pack(fill="both", expand="yes", padx=20, pady=10)
+# wrapperAction.pack(fill="both", expand="yes", padx=20, pady=10)
+
+
+# # tree view
+# trv = ttk.Treeview(wrapperDatatable, columns=(1, 2, 3, 4, 5, 6, 7, 8, 9), show="headings", height="20")
+# trv.pack()
+# trv.heading(1, text="ID")
+# trv.heading(2, text="First Name")
+# trv.heading(3, text="Last Name")
+# trv.heading(4, text="State")
+# trv.heading(5, text="City")
+# trv.heading(6, text="Address")
+# trv.heading(7, text="Email")
+# trv.heading(8, text="Phone")
+# trv.heading(9, text="Job Title")
+
 
 # FirstName
 first_name = StringVar()
@@ -155,7 +184,7 @@ phone_entry = Entry(app, textvariable=phone_text)
 phone_entry.grid(row=3, column=1)
 # street
 street_text = StringVar()
-street_label = Label(app, text='Street', font=('bold', 14))
+street_label = Label(app, text='Job Title', font=('bold', 14))
 street_label.grid(row=3, column=2, sticky=W)
 street_entry = Entry(app, textvariable=street_text)
 street_entry.grid(row=3, column=3)
@@ -166,14 +195,7 @@ Search_Label = Button(app, text='Search', font=('bold', 14 ), command=search)
 Search_Label.grid(row=5, column=1, sticky=W)
 Search_entry = Entry(app, textvariable=Search_text  )
 Search_entry.grid(row=5, column=0)
-# Id
-Id_text = StringVar()
-Id_label = Label(app, text='Id', font=('bold', 12))
-Id_label.grid(row=6, column=0, sticky=W , padx=20)
-# First_name
-First_name_text = StringVar()
-First_name_label = Label(app, text='First Name', font=('bold', 12))
-First_name_label.grid(row=6, column=1, sticky=W )
+
 # Info List (Listbox)
 parts_list = Listbox(app, height=8, width=80, border=0)
 parts_list.grid(row=7, column=0, columnspan=3, rowspan=6, pady=20, padx=20)

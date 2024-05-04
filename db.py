@@ -31,7 +31,7 @@ class Database:
         self.conn.commit()
 
     def search(self, search_text):
-        self.cur.execute("SELECT * FROM addressbook WHERE firstName = %"+search_text+"% OR lastName = %"+search_text+"% OR state =  %"+search_text+"% OR city =  %"+search_text+"% OR address =  %"+search_text+"% OR email =  %"+search_text+"% OR phone =  %"+search_text+"% OR street =  %"+search_text+"%")       
+        self.cur.execute("SELECT * FROM addressbook WHERE firstName LIKE '%"+search_text+"%' OR lastName LIKE '%"+search_text+"% 'OR state LIKE  '%"+search_text+"%' OR city LIKE '%"+search_text+"%' OR address LIKE '%"+search_text+"%' OR email LIKE '%"+search_text+"%' OR phone LIKE '%"+search_text+"%' OR street LIKE '%"+search_text+"%'")       
         rows = self.cur.fetchall()
         return rows
         

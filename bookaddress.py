@@ -81,7 +81,7 @@ def clear_text():
     phone_entry.delete(0, END)
     street_entry.delete(0, END)
 
-def export():
+def export_data():
     if parts_list.size() == 0:
         messagebox.showerror('Export Data', 'there is no data to export')
         return
@@ -162,7 +162,7 @@ street_entry.grid(row=3, column=3)
 
 # # Search
 Search_text = StringVar()
-Search_Label = Label(app, text='Search', font=('bold', 14))
+Search_Label = Button(app, text='Search', font=('bold', 14 ), command=search)
 Search_Label.grid(row=5, column=1, sticky=W)
 Search_entry = Entry(app, textvariable=Search_text  )
 Search_entry.grid(row=5, column=0)
@@ -199,7 +199,7 @@ update_btn.grid(row=4, column=2)
 clear_btn = Button(app, text='Clear Input', width=12, command=clear_text)
 clear_btn.grid(row=4, column=3)
 
-export_btn = Button(app, text='Export', width=12, command=export)
+export_btn = Button(app, text='Export', width=12, command=export_data)
 export_btn.grid(row=4, column=4)
 
 inport_btn = Button(app, text='Import', width=12, command=import_data)

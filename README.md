@@ -4,7 +4,15 @@
 
 ## Usage
 
+you nee to install python to run this app
+
 ```bash
+# Install dependencies
+python get-pip.py
+
+# Install dependencies
+pip install pipenv
+
 # Install dependencies
 pipenv install
 

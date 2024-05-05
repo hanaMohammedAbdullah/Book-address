@@ -37,19 +37,13 @@ def select_item(event):
 
 
         first_name.set(selected_item['values'][1])
-        LastName_entry.set(END, selected_item['values'][2])
-        state_entry.delete(0, END)
-        state_entry.insert(END, selected_item[3])
-        city_entry.delete(0, END)
-        city_entry.insert(END, selected_item[4])
-        address_entry.delete(0, END)
-        address_entry.insert(END, selected_item[5])
-        email_entry.delete(0, END)
-        email_entry.insert(END, selected_item[6])
-        phone_entry.delete(0, END)
-        phone_entry.insert(END, selected_item[7])
-        street_entry.delete(0, END)
-        street_entry.insert(END, selected_item[8])
+        lastName_text.set(selected_item['values'][2])
+        state_text.set(selected_item['values'][3])
+        city_text.set(selected_item['values'][4])
+        address_text.set(selected_item['values'][5])
+        email_text.set(selected_item['values'][6])
+        phone_text.set(selected_item['values'][7])
+        street_text.set(selected_item['values'][8])
         # Add text to entries
         
     except IndexError:
@@ -57,13 +51,13 @@ def select_item(event):
 
 
 def remove_item():
-    db.remove(selected_item[0])
+    db.remove(selected_item['values'][0])
     clear_text()
     populate_list()
 
 
 def update_item():
-    db.update(selected_item[0], first_name.get(), lastName_text.get(), state_text.get(), city_text.get(), address_text.get(), email_text.get(), phone_text.get(), street_text.get())
+    db.update(selected_item['values'][0], first_name.get(), lastName_text.get(), state_text.get(), city_text.get(), address_text.get(), email_text.get(), phone_text.get(), street_text.get())
     populate_list()
 
 
@@ -84,9 +78,10 @@ def export_data():
     fln = filedialog.asksaveasfilename(initialdir=os.getcwd(),initialfile='Address.csv', defaultextension=".csv", filetypes=[("CSV file", "*.csv")])
     with open(fln, mode='w') as f:
         writer = csv.writer(f ,delimiter=',')
-        writer.writerow(['ID', 'First Name', 'Last Name', 'State', 'City', 'Address', 'Email', 'Phone', 'Street'])
-        for i in range(trv.size()):
-            writer.writerow(trv.get(i))
+        writer.writerow(['ID', 'First Name', 'Last Name', 'State', 'City', 'Address', 'Email', 'Phone', 'Job'])
+        for i in trv.get_children():
+            value = trv.item(i)['values']
+            writer.writerow(value)
         messagebox.showinfo('Data Exported', 'Your data has been exported to ' + os.path.basename(fln) + ' successfully')
 def search():
     trv.delete(*trv.get_children())
@@ -97,44 +92,18 @@ def import_data():
     fln = filedialog.askopenfilename(initialdir=os.getcwd(), title='Open CSV', filetypes=[("CSV file", "*.csv")])
     with open(fln) as f:
         reader = csv.reader(f)
+         # Clear existing data from the Treeview
+        # trv.delete(*trv.get_children())
+
         # skip the first row
         next(reader)
         for row in reader:
             db.insert(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8])
-            trv.insert(END, row)
+            trv.insert('' , 'end', values=row )
         messagebox.showinfo('Data Imported', 'Your data has been imported successfully')       
 # Create window object
 app = Tk()
 
-
-
-
-
-
-# # Info List (Listbox)
-# parts_list = Listbox(app, height=8, width=80, border=0)
-# parts_list.grid(row=7, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
-# # Create scrollbar
-# scrollbar = Scrollbar(app)
-# scrollbar.grid(row=7, column=3)
-# # Set scroll to listbox
-# parts_list.configure(yscrollcommand=scrollbar.set)
-# scrollbar.configure(command=parts_list.yview)
-# 
-
-
-
-#
-
-# # Start program
-# app.mainloop()
-
-
-# # To create an executable, install pyinstaller and run
-# # '''
-# # pyinstaller --onefile --add-binary='/System/Library/Frameworks/Tk.framework/Tk':'tk' --add-binary='/System/Library/Frameworks/Tcl.framework/Tcl':'tcl' part_manager.py
-# # '''
-#  another way of displaying   2222222222
 
 # adding frame 
 
@@ -267,7 +236,7 @@ street_entry.grid(row=3, column=3)
 
 
 # Bind select
-trv.bind('<<ListboxSelect>>', select_item)
+trv.bind('<<TreeviewSelect>>', select_item)
 
 app.mainloop()
 

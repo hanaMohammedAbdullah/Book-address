@@ -184,13 +184,13 @@ trv.heading(9, text="Job ")
 populate_list()
 
 # # Buttons
-add_btn = Button(wrapperAction, text='Add Part', width=12, command=add_item)
+add_btn = Button(wrapperAction, text='Add New', width=12, command=add_item)
 add_btn.grid(row=4, column=0, padx=10 )
 
-remove_btn = Button(wrapperAction, text='Remove Part', width=12, command=remove_item)
+remove_btn = Button(wrapperAction, text='Remove ', width=12, command=remove_item)
 remove_btn.grid(row=4, column=1 , padx=10)
 
-update_btn = Button(wrapperAction, text='Update Part', width=12, command=update_item)
+update_btn = Button(wrapperAction, text='Update ', width=12, command=update_item)
 update_btn.grid(row=4, column=2 , padx=10)
 
 clear_btn = Button(wrapperAction, text='Clear Input', width=12, command=clear_text)

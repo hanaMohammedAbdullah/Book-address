@@ -109,11 +109,12 @@ app = Tk()
 
 app.title('Address Book')
 app.geometry('1400x750')
+app.configure(bg="#333333")
 
 
-wrapperData = LabelFrame(app, text="Address Book data" ,bg="white")
-wrapperAction = LabelFrame(app, text="Address Book Action" , bg="white")
-wrapperDatatable = LabelFrame(app, text="Address Book List", bg="white")
+wrapperData = LabelFrame(app, text="Address Book data" ,bg="#333333" , fg="white")
+wrapperAction = LabelFrame(app, text="Address Book Action" , bg="#333333" , fg="white")
+wrapperDatatable = LabelFrame(app, text="Address Book List" , bg="#333333" , fg="white")
 
 
 
@@ -123,15 +124,15 @@ wrapperDatatable.pack(fill="both", expand="yes", padx=20, pady=10)
 
 
 s=ttk.Style()
-s.theme_use('clam')
+# s.theme_use('clam')
 
 # Add the rowheight
-s.configure('Treeview', rowheight=40 , font=('Arial', 10) , rowWeight=1)
+s.configure('Treeview', rowheight=40 , font=('Arial', 10) , rowWeight=1 , bg='#333333' , fg='white')
 
 
 trv = ttk.Treeview(wrapperDatatable, columns=(1, 2, 3, 4, 5, 6, 7, 8, 9), show="headings" )    
 trv.pack()
-trv.column(1, stretch=NO, width=250)
+trv.column(1, stretch=NO, width=250 )
 trv.heading(1, text="ID")
 trv.column(2, stretch=NO, width=250)
 trv.heading(2, text="First Name")
@@ -177,7 +178,7 @@ inport_btn.grid(row=4, column=5 , padx=10)
 # # # Search
 Search_text = StringVar()
 Search_Label = Button(wrapperAction, text='Search', font=('bold', 10), command=search)
-Search_Label.grid(row=5, column=1, sticky=W , padx=10 , pady=10)
+Search_Label.grid(row=5, column=1,  padx=10 , pady=10)
 Search_entry = Entry(wrapperAction, textvariable=Search_text  )
 Search_entry.grid(row=5, column=0 , padx=10 , pady=10)
 
@@ -186,50 +187,50 @@ Search_entry.grid(row=5, column=0 , padx=10 , pady=10)
 
 # # FirstName
 first_name = StringVar()
-FirstName_label = Label(wrapperData, text='First Name :', font=('bold', 10),  bg="white")
+FirstName_label = Label(wrapperData, text='First Name :', font=('bold', 10), bg="#333333" , fg="white")
 FirstName_label.grid(row=0, column=0 , sticky=W , padx=10 , pady=10)
 FirstName_entry = Entry(wrapperData, textvariable=first_name)
 FirstName_entry.grid(row=0, column=1)
 # LastName
 lastName_text = StringVar()
-LastName_label = Label(wrapperData, text='Last Name :', font=('bold', 10) , bg="white")
+LastName_label = Label(wrapperData, text='Last Name :', font=('bold', 10) ,bg="#333333" , fg="white")
 LastName_label.grid(row=0, column=2, sticky=W , padx=10 , pady=10)
 LastName_entry = Entry(wrapperData, textvariable=lastName_text)
 LastName_entry.grid(row=0, column=3)
 # state
 state_text = StringVar()
-state_label = Label(wrapperData, text='State :', font=('bold', 10) , bg="white")
+state_label = Label(wrapperData, text='State :', font=('bold', 10) ,bg="#333333" , fg="white")
 state_label.grid(row=1, column=0, sticky=W , padx=10 , pady=10)
 state_entry = Entry(wrapperData, textvariable=state_text)
 state_entry.grid(row=1, column=1)
 # city
 city_text = StringVar()
-city_label = Label(wrapperData, text='City :', font=('bold', 10) , bg="white")
+city_label = Label(wrapperData, text='City :', font=('bold', 10) ,bg="#333333" , fg="white")
 city_label.grid(row=1, column=2, sticky=W , padx=10 , pady=10)
 city_entry = Entry(wrapperData, textvariable=city_text)
 city_entry.grid(row=1, column=3)
 
 # address
 address_text = StringVar()
-address_label = Label(wrapperData, text='Address :', font=('bold', 10) , bg="white")
+address_label = Label(wrapperData, text='Address :', font=('bold', 10) ,bg="#333333" , fg="white")
 address_label.grid(row=2, column=0, sticky=W , padx=10 , pady=10)
 address_entry = Entry(wrapperData, textvariable=address_text)
 address_entry.grid(row=2, column=1)
 # email
 email_text = StringVar()
-email_label = Label(wrapperData, text='Email :', font=('bold', 10) , bg="white")
+email_label = Label(wrapperData, text='Email :', font=('bold', 10) ,bg="#333333" , fg="white")
 email_label.grid(row=2, column=2, sticky=W , padx=10 , pady=10)
 email_entry = Entry(wrapperData, textvariable=email_text)
 email_entry.grid(row=2, column=3)
 # phone
 phone_text = StringVar()
-phone_label = Label(wrapperData, text='Phone Number :', font=('bold', 10) , bg="white")
+phone_label = Label(wrapperData, text='Phone Number :', font=('bold', 10) ,bg="#333333" , fg="white")
 phone_label.grid(row=3, column=0, sticky=W , padx=10 , pady=10)
 phone_entry = Entry(wrapperData, textvariable=phone_text)
 phone_entry.grid(row=3, column=1)
 # street
 street_text = StringVar()
-street_label = Label(wrapperData, text='Job :', font=('bold', 10) , bg="white")
+street_label = Label(wrapperData, text='Job :', font=('bold', 10) ,bg="#333333" , fg="white")
 street_label.grid(row=3, column=2, sticky=W , padx=10 , pady=10)
 street_entry = Entry(wrapperData, textvariable=street_text)
 street_entry.grid(row=3, column=3)

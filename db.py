@@ -1,60 +1,87 @@
 import sqlite3
-
+import hashlib
 
 class Database:
     def __init__(self, db):
         self.conn = sqlite3.connect(db)
         self.cur = self.conn.cursor()
-        # first_name.get(), lastName_text.get(),
-            #   state_text.get(), city_text.get(), address_text.get(), email_text.get(), phone_text.get(), street_text.get()
-        self.cur.execute(
-            "CREATE TABLE IF NOT EXISTS addressbook (id INTEGER PRIMARY KEY, firstName text, lastName text, state text , city text, address text, email text, phone text, street text)")
+        
+        # Create tables if not exists
+        self.cur.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT, is_superuser INTEGER)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS addressbook (id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, state TEXT, city TEXT, address TEXT, email TEXT, phone TEXT, job TEXT)")
         self.conn.commit()
 
-    def fetch(self):
+    # User Management Methods
+    def create_user(self, username, password, is_superuser):
+        # Hash the password
+        password_hash = self._hash_password(password)
+        try:
+            self.cur.execute("INSERT INTO users (username, password_hash, is_superuser) VALUES (?, ?, ?)", (username, password_hash, is_superuser))
+            self.conn.commit()
+        except sqlite3.Error as e:
+            print(f"Error creating user: {e}")
+            self.conn.rollback()  # User already exists with the same username
+    def update_user(self, user_id, new_username, new_password, is_superuser):
+        # Implement SQL update statement here
+        sql = "UPDATE users SET username=?, password_hash=?, is_superuser=? WHERE id=?"
+        self.cur.execute(sql, (new_username, new_password, is_superuser, user_id))
+        self.conn.commit()
+    def delete_user(self, user_id):
+        sql = "DELETE FROM users WHERE id=?"
+        self.cur.execute(sql, (user_id,))
+        self.conn.commit()
+    def login(self, username, password):
+        self.cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+        user = self.cur.fetchone()
+        if user:
+            password_hash = user[2]
+            if self._verify_password(password, password_hash):
+                return user
+        return None
+
+    def fetch_users(self):
+        self.cur.execute("SELECT * FROM users")
+        rows = self.cur.fetchall()
+        return rows
+
+    # Password Hashing and Verification
+    def _hash_password(self, password):
+        salt = b'secret_salt_for_password_hashing'  # Change this to a unique value
+        return hashlib.sha256(salt + password.encode('utf-8')).hexdigest()
+
+    def _verify_password(self, password, password_hash):
+        return password_hash == self._hash_password(password)
+
+    # Address Book Methods
+    def fetch_contacts(self):
         self.cur.execute("SELECT * FROM addressbook")
         rows = self.cur.fetchall()
         return rows
 
-    def insert(self, firstName, lastName, state, city, address, email, phone, street):  
-        self.cur.execute("INSERT INTO addressbook VALUES (NULL, ?, ?, ?, ? , ? , ? ,? , ?)",
-                         (firstName, lastName, state, city, address, email, phone, street))
+    def insert_contact(self, firstName, lastName, state, city, address, email, phone, job):
+        self.cur.execute("INSERT INTO addressbook (id,firstName, lastName, state, city, address, email, phone, job) VALUES (NULL,?, ?, ?, ?, ?, ?, ?, ?)",
+                         (firstName, lastName, state, city, address, email, phone, job))
         self.conn.commit()
 
-    def remove(self, id):
-        self.cur.execute("DELETE FROM addressbook WHERE id=?", (id,))
+    def remove_contact(self, contact_id):
+        self.cur.execute("DELETE FROM addressbook WHERE id = ?", (contact_id,))
         self.conn.commit()
 
-    def update(self, id, firstName, lastName, state, city, address, email, phone, street):
-        self.cur.execute("UPDATE addressbook SET firstName = ?, lastName = ?,  state= ?, city = ? , address = ? , email = ?,phone = ? , street = ? WHERE id = ?",
-                         (firstName, lastName, state, city, address, email, phone, street , id))
+    def update_contact(self, contact_id, firstName, lastName, state, city, address, email, phone, job):
+        self.cur.execute("UPDATE addressbook SET firstName = ?, lastName = ?, state = ?, city = ?, address = ?, email = ?, phone = ?, job = ? WHERE id = ?",
+                         (firstName, lastName, state, city, address, email, phone, job, contact_id))
         self.conn.commit()
 
-    def search(self, search_text):
-        self.cur.execute("SELECT * FROM addressbook WHERE firstName LIKE '%"+search_text+"%' OR lastName LIKE '%"+search_text+"% 'OR state LIKE  '%"+search_text+"%' OR city LIKE '%"+search_text+"%' OR address LIKE '%"+search_text+"%' OR email LIKE '%"+search_text+"%' OR phone LIKE '%"+search_text+"%' OR street LIKE '%"+search_text+"%'")       
+    def search_contacts(self, search_text):
+        self.cur.execute("SELECT * FROM addressbook WHERE firstName LIKE ? OR lastName LIKE ? OR state LIKE ? OR city LIKE ? OR address LIKE ? OR email LIKE ? OR phone LIKE ? OR job LIKE ?",
+                         (f"%{search_text}%", f"%{search_text}%", f"%{search_text}%", f"%{search_text}%", f"%{search_text}%", f"%{search_text}%", f"%{search_text}%", f"%{search_text}%"))
         rows = self.cur.fetchall()
         return rows
-        
 
     def __del__(self):
         self.conn.close()
 
 
-# db = Database('addressbook.db')
-# db.insert("hana", "muhammed", "kurdistan", "erbil", "40 meter ,erbil", "hano@gmail.com", "07503073718", "byaraty")
-# ("hana", "muhammed", "kurdistan", "erbil", "40 meter, erbil", "hano@gmail.com", "07503073718", "byaraty"),
-#     
-#   DATA= [("alice", "jones", "Canada", "Toronto", "456 Elm Street", "alice@example.com", "987-654-3210", "Designer"),
-#     ("mohammed", "ali", "Egypt", "Cairo", "789 Nile Avenue", "mohammed@example.com", "555-123-4567", "Engineer"),
-#     ("emma", "wang", "China", "Beijing", "321 Great Wall Road", "emma@example.com", "888-999-7777", "Manager"),
-#     ("alex", "gonzalez", "Mexico", "Mexico City", "567 Revolution Avenue", "alex@example.com", "111-222-3333", "Sales"),
-#     ("sophia", "kim", "South Korea", "Seoul", "987 Gangnam Boulevard", "sophia@example.com", "333-444-5555", "Marketing"),
-#     ("ahmad", "ahmadi", "Iran", "Tehran", "654 Ferdowsi Street", "ahmad@example.com", "666-777-8888", "Researcher"),
-#     ("lucia", "garcia", "Spain", "Madrid", "876 Prado Lane", "lucia@example.com", "999-000-1111", "Writer"),
-#     ("marius", "jensen", "Norway", "Oslo", "234 Fjord Street", "marius@example.com", "222-333-4444", "Artist") I INSSER THOSE DATA TO THE DATABASE
-# # db.insert(("john", "smith", "USA", "New York", "123 Main Street", "john@example.com", "123-456-7890", "Developer")]
-# db.insert("john", "smith", "USA", "New York", "123 Main Street", "JOSNN@KCNEKN.COM", "123-456-7890", "Developer")
-# db.insert("alice", "jones", "Canada", "Toronto", "456 Elm Street", "YAHOO.COM", "987-654-3210", "Designer")
-
-#
-
+db = Database('addressbook.db')
+db.create_user("admin", "password", 1)  # Superuser
+db.create_user("user", "password", 0)  # Regular user
